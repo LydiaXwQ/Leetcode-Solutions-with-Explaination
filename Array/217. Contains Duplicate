@@ -1,0 +1,117 @@
+## 217. Contains Duplicate [Easy]
+
+##### Question: 
+
+##### Given an integer array `nums`, return `true` if any value appears at least twice in the array, and return `false` if every element is distinct.
+
+
+
+**Approach 1: Brute Force**
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        for(int i = 0; i < nums.length; i++) {
+            for(int j = i + 1; j < nums.length; j++) {
+                if(nums[j] == nums[i]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+```
+
+**Reflection:**
+
+The time complexity is **``O(n^2)``**, and this will give Time Limit Exceeded exception **(TLE)** when array size is large.
+
+
+
+**Approach 2**: **Sorting**
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Arrays.sort(nums);
+        for(int i = 1; i < nums.length; i++) {
+            if(nums[i] == nums[i - 1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+**Reflection:**
+
+Sort the array first, then check any pairs in the array, if there's any pairs are the same (any duplicates found), then return ture. Otherwise, return false.
+
+The time complexity is O(nlogn) + O(n) ---> **``O(nlogn)``** . Since Arrays.sort() takes a runtime of O(nlogn)
+
+
+
+**Approach 3: HashSet**
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+       HashSet<Integer> seen = new HashSet<>();
+       for(int i = 0; i < nums.length; i++) {
+           if(!seen.contains(nums[i])) {
+               seen.add(nums[i]);
+           } else {
+               return true;
+           }
+       }
+       return false;
+    }
+}
+```
+
+**Reflection:**
+
+Iterate through the elements and store them one by one into the hashset. If one is already in the set, then return true (since there's a duplicate of that number). Otherwise, return false.
+
+The time complexity is **`O(n)`** since .contains() or the get/find operations in hashset and hashmap is O(1), and we only use one for loop in this code, so the total complexity is O(n).
+
+
+
+**Approach 4: HashMap**
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        HashMap<Integer, Integer> seen = new HashMap<>();
+        for(int num : nums) {
+            if (!seen.containsKey(num)) {
+                seen.put(num, 1);
+            } else {
+                seen.put(num, seen.get(num) + 1);
+            }
+            
+            if(seen.get(num) > 1) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+}
+```
+
+**Reflection:**
+
+Use a HashMap to record the occurences of the element:
+
+1. If the element doesn't in HashMap yet, initialize the bucket with element and count of 1
+2. If the element exists in the HashMap, update the counts ++
+
+At the same time, checking if the element counts is over 1. If so, return true.
+
+Otherwise, return false.
+
+The time complexity is **`O(n),`** since the get operations only take constant time, and we only have one for-loop in the code.
+
